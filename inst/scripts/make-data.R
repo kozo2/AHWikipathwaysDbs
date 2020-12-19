@@ -1,5 +1,6 @@
 library(xml2)
 library(rWikiPathways)
+library(BridgeDbR)
 
 wikipathways_release_date <- "20201210"
 
