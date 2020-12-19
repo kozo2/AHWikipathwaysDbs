@@ -1,0 +1,25 @@
+Package: AHWikipathwaysDbs
+Type: Package
+Title: Metabolites and proteins linked to WikiPathways pathways (for AnnotationHub)
+Version: 0.99.1
+Encoding: UTF-8
+Authors@R:
+    person(given = "Kozo",
+           family = "Nishida",
+           role = c("aut", "cre"),
+           email = "kozo.nishida@gmail.com",
+           comment = c(ORCID = "0000-0001-8501-7319"))
+Depends: R (>= 4.1.0)
+Imports: AnnotationHub (>= 2.23.0)
+Suggests: BiocStyle,
+    magrittr,
+    dplyr,
+    tibble,
+    knitr
+Description: FILLME
+VignetteBuilder: knitr
+License: FILLME
+URL: https://github.com/biopackathon/AHWikipathwaysDbs
+LazyData: true
+RoxygenNote: 7.0.2
+biocViews: AnnotationHub, CustomDBSchema, FunctionalAnnotation
