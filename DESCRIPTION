@@ -1,0 +1,39 @@
+Package: AHWikipathwaysDbs
+Type: Package
+Title: Metabolites linked to WikiPathways pathways (for AnnotationHub)
+Version: 0.99.1
+Encoding: UTF-8
+Authors@R:
+    person(given = "Kozo",
+           family = "Nishida",
+           role = c("aut", "cre"),
+           email = "kozo.nishida@gmail.com",
+           comment = c(ORCID = "0000-0001-8501-7319"))
+Depends: R (>= 4.1.0)
+Imports: AnnotationHub (>= 2.23.0)
+Suggests: BiocStyle,
+    magrittr,
+    dplyr,
+    tibble,
+    knitr
+Description: The package provides a comprehensive mapping table of 
+    metabolites linked to Wikipathways pathways.
+    The tables include HMDB, KEGG, ChEBI, CAS, Drugbank, PubChem, ChemSpider,
+    Knapsack, and Wikidata IDs.
+    The tables are provided for each of the 25 species
+    ("Anopheles gambiae", "Arabidopsis thaliana",
+    "Bacillus subtilis", "Bos taurus", "Caenorhabditis elegans",
+    "Canis familiaris", "Danio rerio", "Drosophila melanogaster",
+    "Equus caballus", "Escherichia coli", "Gallus gallus", "Gibberella zeae",
+    "Homo sapiens", "Hordeum vulgare", "Mus musculus",
+    "Mycobacterium tuberculosis", "Oryza sativa", "Pan troglodytes",
+    "Plasmodium falciparum", "Populus trichocarpa", "Rattus norvegicus",
+    "Saccharomyces cerevisiae", "Solanum lycopersicum", "Sus scrofa",
+    "Zea mays").
+    These table information can be used for Metabolite Set Enrichment Analysis.
+VignetteBuilder: knitr
+License: Artistic-2.0
+URL: https://github.com/kozo2/AHWikipathwaysDbs
+LazyData: true
+RoxygenNote: 7.0.2
+biocViews: AnnotationHub, CustomDBSchema, FunctionalAnnotation
