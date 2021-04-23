@@ -22,7 +22,8 @@ titles <- paste("wikipathways", gsub(" ", "_", wikipathways_species),
                 "metabolites.rda", sep = "_")
 descriptions <- paste('Metabolite names linked to Wikipathways',
     wikipathways_species,
-    'pathways (includes HMDB, KEGG, ChEBI, Drugbank, ChemSpider and CAS IDs)')
+    'pathways (includes HMDB, KEGG, ChEBI, Drugbank, PubChem compound,',
+    'ChemSpider, KNApSAcK, and Wikidata IDs + CAS + InChI Key)')
 
 meta <- data.frame(
     Title = titles,
