@@ -6,7 +6,6 @@ library(rWikiPathways)
 library(dplyr)
 
 wikipathways_release_date <- "20210410"
-
 wikipathways_species <- c("Anopheles gambiae", "Arabidopsis thaliana",
     "Bacillus subtilis", "Bos taurus", "Caenorhabditis elegans",
     "Canis familiaris", "Danio rerio", "Drosophila melanogaster",
@@ -17,9 +16,6 @@ wikipathways_species <- c("Anopheles gambiae", "Arabidopsis thaliana",
     "Saccharomyces cerevisiae", "Solanum lycopersicum", "Sus scrofa",
     "Zea mays")
 
-# metabolite_bridge_url <- "https://ndownloader.figshare.com/files/25388453"
-# download.file(metabolite_bridge_url, "metabolites_20201104.bridge")
-
 file <- "metabolites_20210109.bridge"
 # download.file(
 #     "https://ndownloader.figshare.com/files/26001794",
@@ -29,26 +25,28 @@ file <- "metabolites_20210109.bridge"
 # mapper <- loadDatabase(location)
 mapper <- loadDatabase(file)
 
-for (species in wikipathways_species) {
-    filename = downloadPathwayArchive(date=wikipathways_release_date,
-                                    organism=species, format="gpml")
-    gpmlpaths = utils::unzip(filename)
-    df <- tibble(wpid = character(), wpid_version = character(),
-                pathway_name = character(),
-                metabolite_name = character(),
-                HMDB_ID = character(), KEGG_ID = character(),
-                ChEBI_ID = character(), DrugBank_ID = character(),
-                PubChem_CID = character(), ChemSpider = character(),
-                KNaPSAcK_ID = character(), Wikidata_ID = character(),
-                CAS = character(), InChI_Key =character())
-    for (gpmlpath in gpmlpaths) {
-        print(paste0('reading', gpmlpath))
-        df = readGpml(gpmlpath, df)
+createWikipathwaysMetabolitesDb <- function() {
+    for (species in wikipathways_species) {
+        filename = downloadPathwayArchive(date=wikipathways_release_date,
+                                          organism=species, format="gpml")
+        gpmlpaths = utils::unzip(filename)
+        df <- tibble(wpid = character(), wpid_version = character(),
+                     pathway_name = character(),
+                     metabolite_name = character(),
+                     HMDB_ID = character(), KEGG_ID = character(),
+                     ChEBI_ID = character(), DrugBank_ID = character(),
+                     PubChem_CID = character(), ChemSpider_ID = character(),
+                     KNApSAcK_ID = character(), Wikidata_ID = character(),
+                     CAS = character(), InChI_Key =character())
+        for (gpmlpath in gpmlpaths) {
+            print(paste0('reading', gpmlpath))
+            df = readGpml(gpmlpath, df)
+        }
+        filename = paste("wikipathways", gsub(" ", "_", species),
+                         "metabolites.rda", sep = "_")
+        df = distinct(df)
+        save(df, file = filename, compress = "xz")
     }
-    filename = paste("wikipathways", gsub(" ", "_", species),
-                     "metabolites.rda", sep = "_")
-    df = distinct(df)
-    save(df, file = filename, compress = "xz")
 }
 
 readGpml <- function(gpmlpath, df) {
@@ -84,13 +82,13 @@ readGpml <- function(gpmlpath, df) {
                     df = addrow_from_cas(df, wpid, wpid_version,
                                       pathway_name, metabolite_name, mol_id)
                 } else if (database == "Chemspider") {
-                  df = addrow_from_chemspider(df, wpid, wpid_version,
+                    df = addrow_from_chemspider(df, wpid, wpid_version,
                                       pathway_name, metabolite_name, mol_id)
                 } else if (database == "Wikidata") {
-                  df = addrow_from_wikidata(df, wpid, wpid_version,
+                    df = addrow_from_wikidata(df, wpid, wpid_version,
                                       pathway_name, metabolite_name, mol_id)
                 } else if (database == "KNApSAcK") {
-                  df = addrow_from_knapsack(df, wpid, wpid_version,
+                    df = addrow_from_knapsack(df, wpid, wpid_version,
                                       pathway_name, metabolite_name, mol_id)
                 } else if (is.null(database) || database == "") {
                     #print(paste0(metabolite_name, " does not have Xref"))
@@ -120,29 +118,29 @@ addrow_from_hmdb <- function(df, wpid, wpid_version, pathway_name,
             metabolite_name = metabolite_name,
             HMDB_ID = mol_id, KEGG_ID = Ck, ChEBI_ID = Ce,
             PubChem_CID = Cpc, DrugBank_ID = Dr, CAS = Ca, InChI_Key = Ik,
-            ChemSpider = Cs, Wikidata_ID = Wd, KNaPSAcK_ID = Cks)
+            ChemSpider_ID = Cs, Wikidata_ID = Wd, KNApSAcK_ID = Cks)
     return(df)
 }
 
 addrow_from_kegg <- function(df, wpid, wpid_version, pathway_name,
                         metabolite_name, mol_id){
-  system_code = "Ck"
-  Ch = get_mapped_id(mapper, mol_id, source = system_code, target = "Ch")
-  Ce = get_mapped_id(mapper, mol_id, source = system_code, target = "Ce")
-  Cpc = get_mapped_id(mapper, mol_id, source = system_code, target = "Cpc")
-  Dr = get_mapped_id(mapper, mol_id, source = system_code, target = "Dr")
-  Ca = get_mapped_id(mapper, mol_id, source = system_code, target = "Ca")
-  Ik = get_mapped_id(mapper, mol_id, source = system_code, target = "Ik")
-  Cs = get_mapped_id(mapper, mol_id, source = system_code, target = "Cs")
-  Wd = get_mapped_id(mapper, mol_id, source = system_code, target = "Wd")
-  Cks = get_mapped_id(mapper, mol_id, source = system_code, target = "Cks")
-  df = add_row(df, wpid = wpid, wpid_version = wpid_version,
-            pathway_name = pathway_name,
-            metabolite_name = metabolite_name,
-            HMDB_ID = Ch, KEGG_ID = mol_id, ChEBI_ID = Ce,
-            PubChem_CID = Cpc, DrugBank_ID = Dr, CAS = Ca, InChI_Key = Ik,
-            ChemSpider = Cs, Wikidata_ID = Wd, KNaPSAcK_ID = Cks)
-  return(df)
+    system_code = "Ck"
+    Ch = get_mapped_id(mapper, mol_id, source = system_code, target = "Ch")
+    Ce = get_mapped_id(mapper, mol_id, source = system_code, target = "Ce")
+    Cpc = get_mapped_id(mapper, mol_id, source = system_code, target = "Cpc")
+    Dr = get_mapped_id(mapper, mol_id, source = system_code, target = "Dr")
+    Ca = get_mapped_id(mapper, mol_id, source = system_code, target = "Ca")
+    Ik = get_mapped_id(mapper, mol_id, source = system_code, target = "Ik")
+    Cs = get_mapped_id(mapper, mol_id, source = system_code, target = "Cs")
+    Wd = get_mapped_id(mapper, mol_id, source = system_code, target = "Wd")
+    Cks = get_mapped_id(mapper, mol_id, source = system_code, target = "Cks")
+    df = add_row(df, wpid = wpid, wpid_version = wpid_version,
+              pathway_name = pathway_name,
+              metabolite_name = metabolite_name,
+              HMDB_ID = Ch, KEGG_ID = mol_id, ChEBI_ID = Ce,
+              PubChem_CID = Cpc, DrugBank_ID = Dr, CAS = Ca, InChI_Key = Ik,
+              ChemSpider_ID = Cs, Wikidata_ID = Wd, KNApSAcK_ID = Cks)
+    return(df)
 }
 
 addrow_from_chebi <- function(df, wpid, wpid_version, pathway_name,
@@ -162,7 +160,7 @@ addrow_from_chebi <- function(df, wpid, wpid_version, pathway_name,
             metabolite_name = metabolite_name,
             HMDB_ID = Ch, KEGG_ID = Ck, ChEBI_ID = mol_id,
             PubChem_CID = Cpc, DrugBank_ID = Dr, CAS = Ca, InChI_Key = Ik,
-            ChemSpider = Cs, Wikidata_ID = Wd, KNaPSAcK_ID = Cks)
+            ChemSpider_ID = Cs, Wikidata_ID = Wd, KNApSAcK_ID = Cks)
     return(df)
 }
 
@@ -183,7 +181,7 @@ addrow_from_pubchem <- function(df, wpid, wpid_version, pathway_name,
             metabolite_name = metabolite_name,
             HMDB_ID = Ch, KEGG_ID = Ck, ChEBI_ID = Ce,
             PubChem_CID = mol_id, DrugBank_ID = Dr, CAS = Ca, InChI_Key = Ik,
-            ChemSpider = Cs, Wikidata_ID = Wd, KNaPSAcK_ID = Cks)
+            ChemSpider_ID = Cs, Wikidata_ID = Wd, KNApSAcK_ID = Cks)
     return(df)
 }
 
@@ -204,7 +202,7 @@ addrow_from_cas <- function(df, wpid, wpid_version, pathway_name,
             metabolite_name = metabolite_name,
             HMDB_ID = Ch, KEGG_ID = Ck, ChEBI_ID = Ce,
             PubChem_CID = Cpc, DrugBank_ID = Dr, CAS = mol_id, InChI_Key = Ik,
-            ChemSpider = Cs, Wikidata_ID = Wd, KNaPSAcK_ID = Cks)
+            ChemSpider_ID = Cs, Wikidata_ID = Wd, KNApSAcK_ID = Cks)
     return(df)
 }
 
@@ -225,7 +223,7 @@ addrow_from_chemspider <- function(df, wpid, wpid_version, pathway_name,
             metabolite_name = metabolite_name,
             HMDB_ID = Ch, KEGG_ID = Ck, ChEBI_ID = Ce,
             PubChem_CID = Cpc, DrugBank_ID = Dr, CAS = Ca, InChI_Key = Ik,
-            ChemSpider = mol_id, Wikidata_ID = Wd, KNaPSAcK_ID = Cks)
+            ChemSpider_ID = mol_id, Wikidata_ID = Wd, KNApSAcK_ID = Cks)
     return(df)
 }
 
@@ -246,7 +244,7 @@ addrow_from_wikidata <- function(df, wpid, wpid_version, pathway_name,
             metabolite_name = metabolite_name,
             HMDB_ID = Ch, KEGG_ID = Ck, ChEBI_ID = Ce,
             PubChem_CID = Cpc, DrugBank_ID = Dr, CAS = Ca, InChI_Key = Ik,
-            ChemSpider = Cs, Wikidata_ID = mol_id, KNaPSAcK_ID = Cks)
+            ChemSpider_ID = Cs, Wikidata_ID = mol_id, KNApSAcK_ID = Cks)
     return(df)
 }
 
@@ -267,7 +265,7 @@ addrow_from_knapsack <- function(df, wpid, wpid_version, pathway_name,
                  metabolite_name = metabolite_name,
                  HMDB_ID = Ch, KEGG_ID = Ck, ChEBI_ID = Ce,
                  PubChem_CID = Cpc, DrugBank_ID = Dr, CAS = Ca, InChI_Key = Ik,
-                 ChemSpider = Cs, Wikidata_ID = Wd, KNaPSAcK_ID = mol_id)
+                 ChemSpider_ID = Cs, Wikidata_ID = Wd, KNApSAcK_ID = mol_id)
     return(df)
 }
 
