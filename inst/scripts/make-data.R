@@ -17,13 +17,12 @@ wikipathways_species <- c("Anopheles gambiae", "Arabidopsis thaliana",
     "Zea mays")
 
 file <- "metabolites_20210109.bridge"
-# download.file(
-#     "https://ndownloader.figshare.com/files/26001794",
-#     location
-# )
-# location = normalizePath(file)
-# mapper <- loadDatabase(location)
-mapper <- loadDatabase(file)
+download.file(
+    "https://ndownloader.figshare.com/files/26001794",
+    location
+)
+location = normalizePath(file)
+mapper <- loadDatabase(location)
 
 createWikipathwaysMetabolitesDb <- function() {
     for (species in wikipathways_species) {
