@@ -71,7 +71,7 @@ hsatbl[hsatbl$`Pathway Name`=="Amino Acid metabolism", ]
 
 This section describes the automated way to create Wikipathways
 tibble databases using
-[Wikipathways Versioned Releases](https://www.wikipathways.org/index.php/Download_Pathways).
+[GPML XML files](https://wikipathways-data.wmcloud.org/20210410/gpml/).
 
 ## Creating Wikipathways tibble databases
 
