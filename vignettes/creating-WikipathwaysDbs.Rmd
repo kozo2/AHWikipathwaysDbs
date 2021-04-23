@@ -1,0 +1,94 @@
+---
+title: "Provide WikipathwaysDb databases for AnnotationHub"
+author: "Kozo Nishida"
+graphics: no
+package: AHWikipathwaysDbs
+output:
+    BiocStyle::html_document:
+        toc_float: true
+vignette: >
+    %\VignetteIndexEntry{Provide WikipathwaysDb databases for AnnotationHub}
+    %\VignetteEngine{knitr::rmarkdown}
+    %\VignetteEncoding{UTF-8}
+    %\VignetteDepends{AnnotationHub}
+---
+
+```{r style, echo = FALSE, results = 'asis', message=FALSE}
+BiocStyle::markdown()
+```
+
+# Fetch Wikipathways databases from `AnnotationHub`
+
+The `AHPathbankDbs` package provides the metadata for all Wikipathways tibble
+databases in `r Biocpkg("AnnotationHub")`. First we load/update the
+`AnnotationHub` resource.
+
+```{r load-lib, message = FALSE}
+library(AnnotationHub)
+ah <- AnnotationHub()
+```
+
+Next we list all Wikipathways entries from `AnnotationHub`.
+
+```{r list-wikipathwaysdb}
+query(ah, "wikipathways")
+```
+
+We can confirm the metadata in AnnotationHub in Bioconductor S3 bucket
+with `mcols()`.
+
+```{r confirm-metadata}
+mcols(query(ah, "wikipathways"))
+```
+
+We query only the Wikipathways tibble for species *Homo sapiens*.
+
+```{r query-hsa}
+qr <- query(ah, c("wikipathways", "Homo sapiens"))
+qr
+```
+There are a tibble in the result.
+Let's get a tibble of it here.
+
+```{r load-hsatbl}
+hsatbl <- qr[[1]]
+hsatbl
+```
+
+Each row shows information for one metabolite.
+This tibble indicates which pathway of Wikipathways has those metabolites.
+Each metabolite has a the name, HMDB_ID, KEGG_ID, ChEBI_ID, DrugBank_ID,
+PubChem_CID, ChemSpider, KNaPSAcK_ID, Wikidata_ID, CAS and InChI Key
+as well as the pathway information to which it belongs.
+
+To get the metabolites defined for *TCA Cycle* we can call.
+
+```{r get-metabolites}
+hsatbl[hsatbl$`Pathway Name`=="Amino Acid metabolism", ]
+```
+
+# Creating Wikipathways tibbles
+
+This section describes the automated way to create Wikipathways
+tibble databases using
+[Wikipathways Versioned Releases](https://www.wikipathways.org/index.php/Download_Pathways).
+
+## Creating Wikipathways tibble databases
+
+To create the databases we use the `createWikipathwaysMetabolitesDb` function.
+This function downloads the zip archive of "Wikipathways GPML" XML files.
+Then, those XMLs are integrated into a table for each species and tibbleed.
+
+These functions have no parameters.
+In other words, it does not have the function of making tibble only for a
+specific species, but makes tibble for all species in Wikipathways.
+
+```{r create-rda, eval = FALSE}
+library(AHWikipathwaysDbs)
+scr <- system.file("scripts/make-data.R", package = "AHWikipathwaysDbs")
+source(scr)
+createWikipathwaysMetabolitesDb()
+```
+
+The tibble is stored in the rda file and saved in the current working
+directory.
