@@ -58,10 +58,10 @@ hsatbl
 Each row shows information for one metabolite.
 This tibble indicates which pathway of Wikipathways has those metabolites.
 Each metabolite has a the name, HMDB_ID, KEGG_ID, ChEBI_ID, DrugBank_ID,
-PubChem_CID, ChemSpider, KNaPSAcK_ID, Wikidata_ID, CAS and InChI Key
+PubChem_CID, ChemSpider_ID, KNApSAcK_ID, Wikidata_ID, CAS and InChI Key
 as well as the pathway information to which it belongs.
 
-To get the metabolites defined for *TCA Cycle* we can call.
+To get the metabolites defined for *Amino Acid metabolism* we can call.
 
 ```{r get-metabolites}
 hsatbl[hsatbl$`Pathway Name`=="Amino Acid metabolism", ]
@@ -79,7 +79,7 @@ To create the databases we use the `createWikipathwaysMetabolitesDb` function.
 This function downloads the zip archive of "Wikipathways GPML" XML files.
 Then, those XMLs are integrated into a table for each species and tibbleed.
 
-These functions have no parameters.
+The function has no parameters.
 In other words, it does not have the function of making tibble only for a
 specific species, but makes tibble for all species in Wikipathways.
 
