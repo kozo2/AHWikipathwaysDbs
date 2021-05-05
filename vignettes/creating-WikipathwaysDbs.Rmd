@@ -64,7 +64,7 @@ as well as the pathway information to which it belongs.
 To get the metabolites defined for *Amino Acid metabolism* we can call.
 
 ```{r get-metabolites}
-hsatbl[hsatbl$`Pathway Name`=="Amino Acid metabolism", ]
+hsatbl[hsatbl$`pathway_name`=="Amino Acid metabolism", ]
 ```
 
 # Creating Wikipathways tibbles
