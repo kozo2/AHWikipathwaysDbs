@@ -1,7 +1,7 @@
 Package: AHWikipathwaysDbs
 Type: Package
 Title: Metabolites linked to WikiPathways pathways (for AnnotationHub)
-Version: 0.99.1
+Version: 0.99.2
 Encoding: UTF-8
 Authors@R:
     person(given = "Kozo",
