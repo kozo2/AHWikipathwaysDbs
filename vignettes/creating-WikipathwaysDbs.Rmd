@@ -19,8 +19,8 @@ BiocStyle::markdown()
 
 # Fetch Wikipathways databases from `AnnotationHub`
 
-The `AHWikipathwaysDbs` package provides the metadata for all Wikipathways tibble
-databases in `r Biocpkg("AnnotationHub")`. First we load/update the
+The `AHWikipathwaysDbs` package provides the metadata for all Wikipathways
+tibble databases in `r Biocpkg("AnnotationHub")`. First we load/update the
 `AnnotationHub` resource.
 
 ```{r load-lib, message = FALSE}
