@@ -1,7 +1,7 @@
 Package: AHWikipathwaysDbs
 Type: Package
 Title: Metabolites linked to WikiPathways pathways (for AnnotationHub)
-Version: 0.99.3
+Version: 0.99.4
 Encoding: UTF-8
 Authors@R:
     person(given = "Kozo",
@@ -15,7 +15,8 @@ Suggests: BiocStyle,
     magrittr,
     dplyr,
     tibble,
-    knitr
+    knitr,
+    rmarkdown
 Description: The package provides a comprehensive mapping table of 
     metabolites linked to Wikipathways pathways.
     The tables include HMDB, KEGG, ChEBI, Drugbank, PubChem compound,
