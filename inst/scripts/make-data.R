@@ -5,7 +5,7 @@ library(BridgeDbR)
 library(rWikiPathways)
 library(dplyr)
 
-wikipathways_release_date <- "20210410"
+wikipathways_release_date <- "20230610"
 wikipathways_species <- c("Anopheles gambiae", "Arabidopsis thaliana",
     "Bacillus subtilis", "Bos taurus", "Caenorhabditis elegans",
     "Canis familiaris", "Danio rerio", "Drosophila melanogaster",
@@ -16,9 +16,9 @@ wikipathways_species <- c("Anopheles gambiae", "Arabidopsis thaliana",
     "Saccharomyces cerevisiae", "Solanum lycopersicum", "Sus scrofa",
     "Zea mays")
 
-file <- "metabolites_20210109.bridge"
+file <- "metabolites_20220707.bridge"
 download.file(
-    "https://ndownloader.figshare.com/files/26001794",
+    "https://ndownloader.figshare.com/files/36197283",
     location
 )
 location = normalizePath(file)
