@@ -1,5 +1,6 @@
 library(httr2)
 library(jsonlite)
+library(taxize)
 
 url <- "https://www.wikipathways.org/json/listOrganisms.json"
 resp <- request(url) |> req_perform()
@@ -7,15 +8,8 @@ json_data <- resp_body_string(resp)
 parsed_data <- fromJSON(json_data)
 wikipathways_species <- parsed_data$organisms
 
-wikipathways_taxonomyids <-c("7165", "3702",
-    "1423", "9913", "6239",
-    "9615", "7955", "7227",
-    "9796", "562", "9031", "5518",
-    "9606", "4513", "10090",
-    "1773", "4530", "9598",
-    "5833", "3694", "10116",
-    "4932", "4081", "9823",
-    "4577")
+# Get NCBI taxonomy IDs for the species using taxize
+wikipathways_taxonomyids <- as.character(get_uid(wikipathways_species))
 
 titles <- paste("wikipathways", gsub(" ", "_", wikipathways_species),
                 "metabolites.rda", sep = "_")
