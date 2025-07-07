@@ -1,12 +1,11 @@
-wikipathways_species <- c("Anopheles gambiae", "Arabidopsis thaliana",
-    "Bacillus subtilis", "Bos taurus", "Caenorhabditis elegans",
-    "Canis familiaris", "Danio rerio", "Drosophila melanogaster",
-    "Equus caballus", "Escherichia coli", "Gallus gallus", "Gibberella zeae",
-    "Homo sapiens", "Hordeum vulgare", "Mus musculus",
-    "Mycobacterium tuberculosis", "Oryza sativa", "Pan troglodytes",
-    "Plasmodium falciparum", "Populus trichocarpa", "Rattus norvegicus",
-    "Saccharomyces cerevisiae", "Solanum lycopersicum", "Sus scrofa",
-    "Zea mays")
+library(httr2)
+library(jsonlite)
+
+url <- "https://www.wikipathways.org/json/listOrganisms.json"
+resp <- request(url) |> req_perform()
+json_data <- resp_body_string(resp)
+parsed_data <- fromJSON(json_data)
+wikipathways_species <- parsed_data$organisms
 
 wikipathways_taxonomyids <-c("7165", "3702",
     "1423", "9913", "6239",
