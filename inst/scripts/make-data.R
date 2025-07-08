@@ -9,16 +9,17 @@ library(dplyr)
 
 wikipathways_release_date <- "20250610"
 
-url <- "https://www.wikipathways.org/json/listOrganisms.json"
-resp <- request(url) |> req_perform()
-json_data <- resp_body_string(resp)
+organisms_url <- "https://www.wikipathways.org/json/listOrganisms.json"
+organisms_resp <- request(organisms_url) |> req_perform()
+json_data <- resp_body_string(organisms_resp)
 parsed_data <- fromJSON(json_data)
 wikipathways_species <- parsed_data$organisms
 
-url <- "https://figshare.com/ndownloader/files/51201419"
+bridgedb_url <- "https://figshare.com/ndownloader/files/51201419"
 destfile <- "metabolites_20241215.bridge"
-resp <- request(url) |> req_perform()
-writeBin(resp_body_raw(resp), destfile)
+bridgedb_resp <- request(bridgedb_url) |> req_perform()
+writeBin(resp_body_raw(bridgedb_resp), destfile)
+
 mapper <- loadDatabase(destfile)
 
 createWikipathwaysMetabolitesDb <- function() {
