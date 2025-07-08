@@ -1,3 +1,5 @@
+library(httr2)
+library(jsonlite)
 library(xml2)
 library(stringr)
 library(tibble)
@@ -5,24 +7,20 @@ library(BridgeDbR)
 library(rWikiPathways)
 library(dplyr)
 
-wikipathways_release_date <- "20210410"
-wikipathways_species <- c("Anopheles gambiae", "Arabidopsis thaliana",
-    "Bacillus subtilis", "Bos taurus", "Caenorhabditis elegans",
-    "Canis familiaris", "Danio rerio", "Drosophila melanogaster",
-    "Equus caballus", "Escherichia coli", "Gallus gallus", "Gibberella zeae",
-    "Homo sapiens", "Hordeum vulgare", "Mus musculus",
-    "Mycobacterium tuberculosis", "Oryza sativa", "Pan troglodytes",
-    "Plasmodium falciparum", "Populus trichocarpa", "Rattus norvegicus",
-    "Saccharomyces cerevisiae", "Solanum lycopersicum", "Sus scrofa",
-    "Zea mays")
+wikipathways_release_date <- "20250610"
 
-file <- "metabolites_20210109.bridge"
-download.file(
-    "https://ndownloader.figshare.com/files/26001794",
-    location
-)
-location = normalizePath(file)
-mapper <- loadDatabase(location)
+organisms_url <- "https://www.wikipathways.org/json/listOrganisms.json"
+organisms_resp <- request(organisms_url) |> req_perform()
+json_data <- resp_body_string(organisms_resp)
+parsed_data <- fromJSON(json_data)
+wikipathways_species <- parsed_data$organisms
+
+bridgedb_url <- "https://figshare.com/ndownloader/files/51201419"
+destfile <- "metabolites_20241215.bridge"
+bridgedb_resp <- request(bridgedb_url) |> req_perform()
+writeBin(resp_body_raw(bridgedb_resp), destfile)
+
+mapper <- loadDatabase(destfile)
 
 createWikipathwaysMetabolitesDb <- function() {
     for (species in wikipathways_species) {

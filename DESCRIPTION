@@ -1,7 +1,7 @@
 Package: AHWikipathwaysDbs
 Type: Package
 Title: Metabolites linked to WikiPathways pathways (for AnnotationHub)
-Version: 0.99.4
+Version: 1.1.0
 Encoding: UTF-8
 Authors@R:
     person(given = "Kozo",
@@ -9,8 +9,8 @@ Authors@R:
            role = c("aut", "cre"),
            email = "kozo.nishida@gmail.com",
            comment = c(ORCID = "0000-0001-8501-7319"))
-Depends: R (>= 4.1.0)
-Imports: AnnotationHub (>= 2.23.0)
+Depends: R (>= 4.5.1)
+Imports: AnnotationHub (>= 3.16.0)
 Suggests: BiocStyle,
     magrittr,
     dplyr,
@@ -21,16 +21,8 @@ Description: The package provides a comprehensive mapping table of
     metabolites linked to Wikipathways pathways.
     The tables include HMDB, KEGG, ChEBI, Drugbank, PubChem compound,
     ChemSpider, KNApSAcK, and Wikidata IDs plus CAS and InChIKey.
-    The tables are provided for each of the 25 species
-    ("Anopheles gambiae", "Arabidopsis thaliana",
-    "Bacillus subtilis", "Bos taurus", "Caenorhabditis elegans",
-    "Canis familiaris", "Danio rerio", "Drosophila melanogaster",
-    "Equus caballus", "Escherichia coli", "Gallus gallus", "Gibberella zeae",
-    "Homo sapiens", "Hordeum vulgare", "Mus musculus",
-    "Mycobacterium tuberculosis", "Oryza sativa", "Pan troglodytes",
-    "Plasmodium falciparum", "Populus trichocarpa", "Rattus norvegicus",
-    "Saccharomyces cerevisiae", "Solanum lycopersicum", "Sus scrofa",
-    "Zea mays").
+    The tables are provided for each of the species included in WikiPathways'
+    release of GPML.
     These table information can be used for Metabolite Set Enrichment Analysis.
 VignetteBuilder: knitr
 License: Artistic-2.0
