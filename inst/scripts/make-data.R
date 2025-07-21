@@ -1,24 +1,57 @@
-library(httr2)
-library(jsonlite)
 library(xml2)
 library(stringr)
 library(tibble)
+library(dplyr)
 library(BridgeDbR)
 library(rWikiPathways)
-library(dplyr)
 
-wikipathways_release_date <- "20250610"
+wikipathways_release_date <- "20250710"
 
-organisms_url <- "https://www.wikipathways.org/json/listOrganisms.json"
-organisms_resp <- request(organisms_url) |> req_perform()
-json_data <- resp_body_string(organisms_resp)
-parsed_data <- fromJSON(json_data)
-wikipathways_species <- parsed_data$organisms
+# Vertebrates
+chicken_url <- paste0("https://zenodo.org/records/15905886/files/wikipathways-", wikipathways_release_date, "-gpml-Gallus_gallus.zip")
+chimp_url <- paste0("https://zenodo.org/records/15905897/files/wikipathways-", wikipathways_release_date, "-gpml-Pan_troglodytes.zip")
+cow_url <- paste0("https://zenodo.org/records/15905900/files/wikipathways-", wikipathways_release_date, "-gpml-Bos_taurus.zip")
+dog_url <- paste0("https://zenodo.org/records/15905903/files/wikipathways-", wikipathways_release_date, "-gpml-Canis_lupus_familiaris.zip")
+horse_url <- paste0("https://zenodo.org/records/15905906/files/wikipathways-", wikipathways_release_date, "-gpml-Equus_caballus.zip")
+human_url <- paste0("https://zenodo.org/records/15905909/files/wikipathways-", wikipathways_release_date, "-gpml-Homo_sapiens.zip")
+mouse_url <- paste0("https://zenodo.org/records/15905912/files/wikipathways-", wikipathways_release_date, "-gpml-Mus_musculus.zip")
+pig_url <- paste0("https://zenodo.org/records/15905915/files/wikipathways-", wikipathways_release_date, "-gpml-Sus_scrofa.zip")
+rat_url <- paste0("https://zenodo.org/records/15905918/files/wikipathways-", wikipathways_release_date, "-gpml-Rattus_norvegicus.zip")
+zebrafish_url <- paste0("https://zenodo.org/records/15905921/files/wikipathways-", wikipathways_release_date, "-gpml-Danio_rerio.zip")
 
-bridgedb_url <- "https://figshare.com/ndownloader/files/51201419"
+# Plants
+arabidopsis_url <- paste0("https://zenodo.org/records/15905924/files/wikipathways-", wikipathways_release_date, "-gpml-Arabidopsis_thaliana.zip")
+barley_url <- paste0("https://zenodo.org/records/15905925/files/wikipathways-", wikipathways_release_date, "-gpml-Hordeum_vulgare.zip")
+common_wheat_url <- paste0("https://zenodo.org/records/15905926/files/wikipathways-", wikipathways_release_date, "-gpml-Triticum_aestivum.zip")
+japanese_rice_url <- paste0("https://zenodo.org/records/15905928/files/wikipathways-", wikipathways_release_date, "-gpml-Oryza_sativa_Japonica.zip")
+maize_url <- paste0("https://zenodo.org/records/15905927/files/wikipathways-", wikipathways_release_date, "-gpml-Zea_mays.zip")
+poplar_url <- paste0("https://zenodo.org/records/15905929/files/wikipathways-", wikipathways_release_date, "-gpml-Populus_trichocarpa.zip")
+tomato_url <- paste0("https://zenodo.org/records/15905936/files/wikipathways-", wikipathways_release_date, "-gpml-Solanum_lycopersicum.zip")
+wine_grape_url <- paste0("https://zenodo.org/records/15905937/files/wikipathways-", wikipathways_release_date, "-gpml-Vitis_vinifera.zip")
+
+# Parasites
+mararia_parasite_url <- paste0("https://zenodo.org/records/15905930/files/wikipathways-", wikipathways_release_date, "-gpml-Plasmodium_falciparum.zip")
+
+# Invertebrates
+c_elegans_url <- paste0("https://zenodo.org/records/15905931/files/wikipathways-", wikipathways_release_date, "-gpml-Caenorhabditis_elegans.zip")
+fruitfly_url <- paste0("https://zenodo.org/records/15905932/files/wikipathways-", wikipathways_release_date, "-gpml-Drosophila_melanogaster.zip")
+mosquito_url <- paste0("https://zenodo.org/records/15905933/files/wikipathways-", wikipathways_release_date, "-gpml-Aedes_aegypti.zip")
+
+# Fungi
+f_graminearum_url <- paste0("https://zenodo.org/records/15905934/files/wikipathways-", wikipathways_release_date, "-gpml-Fusarium_graminearum.zip")
+yeast_url <- paste0("https://zenodo.org/records/15905935/files/wikipathways-", wikipathways_release_date, "-gpml-Saccharomyces_cerevisiae.zip")
+
+# Bacteria
+a_woodii_url <- paste0("https://zenodo.org/records/15905938/files/wikipathways-", wikipathways_release_date, "-gpml-Aquifex_aeolicus.zip")
+b_subtilis_url <- paste0("https://zenodo.org/records/15905939/files/wikipathways-", wikipathways_release_date, "-gpml-Bacillus_subtilis.zip")
+c_bibrioides_url <- paste0("https://zenodo.org/records/15905940/files/wikipathways-", wikipathways_release_date, "-gpml-Campylobacter_jejuni.zip")
+e_coli_url <- paste0("https://zenodo.org/records/15905941/files/wikipathways-", wikipathways_release_date, "-gpml-Escherichia_coli.zip")
+tuberculosis_url <- paste0("https://zenodo.org/records/15905942/files/wikipathways-", wikipathways_release_date, "-gpml-Mycobacterium_tuberculosis.zip")
+
+# bridgedb_url <- "https://figshare.com/ndownloader/files/51201419"
 destfile <- "metabolites_20241215.bridge"
-bridgedb_resp <- request(bridgedb_url) |> req_perform()
-writeBin(resp_body_raw(bridgedb_resp), destfile)
+# bridgedb_resp <- request(bridgedb_url) |> req_perform()
+# writeBin(resp_body_raw(bridgedb_resp), destfile)
 
 mapper <- loadDatabase(destfile)
 
