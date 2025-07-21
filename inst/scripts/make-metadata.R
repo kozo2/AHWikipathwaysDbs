@@ -24,7 +24,7 @@ meta <- data.frame(
     BiocVersion = "3.21",
     Genome = NA,
     SourceType = "XML",
-    SourceUrl = "https://data.wikipathways.org/20250610/gpml/",
+    SourceUrl = "https://zenodo.org/communities/wikipathways/records?q=GPML",
     SourceVersion = "Jun 10 2025",
     Species = wikipathways_species,
     TaxonomyId = wikipathways_taxonomyids,
